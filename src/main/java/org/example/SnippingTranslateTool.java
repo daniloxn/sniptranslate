@@ -1,5 +1,8 @@
 package org.example;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import com.deepl.api.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -16,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class SnippingTranslateTool {
-
     static Point startPoint;
     static Point endPoint;
     static Rectangle selection;
@@ -95,10 +97,19 @@ public class SnippingTranslateTool {
 
                         String texto = tesseract.doOCR(recorte);
                         System.out.println("Texto encontrado:");
-                        System.out.println(texto);
+                        System.out.printf("TEXTO: %s%n%n", texto);
+
+                        Dotenv dotenv = Dotenv.load();
+                        String authKey = dotenv.get("DEEPL_API_KEY");
+                        if (authKey == null || authKey.isBlank()) {
+                            throw new IllegalStateException("DEEPL_API_KEY não encontrada no arquivo .env");
+                        }
+                        DeepLClient cliente = new DeepLClient(authKey);
+                        TextResult result = cliente.translateText(texto, null, "pt-BR");
+                        System.out.println(result.getText());
 
                         janela.dispose();
-                    } catch (IOException | TesseractException ex) {
+                    } catch (IOException | TesseractException | DeepLException | InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
                 }

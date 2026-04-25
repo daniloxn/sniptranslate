@@ -20,6 +20,21 @@
             <artifactId>tess4j</artifactId>
             <version>5.13.0</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.deepl.api</groupId>
+            <artifactId>deepl-java</artifactId>
+            <version>1.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
     </dependencies>
+    
+
 
 </project>
