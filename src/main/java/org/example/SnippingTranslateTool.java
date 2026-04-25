@@ -2,6 +2,11 @@ package org.example;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,7 +22,7 @@ public class SnippingTranslateTool {
     static Rectangle selection;
     private static BufferedImage screenShot;
 
-     static void main(String[] args) throws AWTException {
+    static void main(String[] args) throws AWTException {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] ScreenDevices = ge.getScreenDevices();
         Rectangle totalBounds = new Rectangle();
@@ -83,12 +88,22 @@ public class SnippingTranslateTool {
 
                     try {
                         ImageIO.write(recorte, "png", new File("recorte.png"));
+
+                        ITesseract tesseract = new Tesseract();
+                        tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
+                        tesseract.setLanguage("eng");
+
+                        String texto = tesseract.doOCR(recorte);
+                        System.out.println("Texto encontrado:");
+                        System.out.println(texto);
+
                         janela.dispose();
-                    } catch (IOException ex) {
+                    } catch (IOException | TesseractException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
             }
+
         });
 
         panel.addMouseMotionListener(new MouseMotionAdapter() {
