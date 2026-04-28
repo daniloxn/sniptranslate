@@ -24,7 +24,7 @@ public class SnippingTranslateTool {
     static Rectangle selection;
     private static BufferedImage screenShot;
 
-    static void main(String[] args) throws AWTException {
+    public static void main(String[] args) throws AWTException {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] ScreenDevices = ge.getScreenDevices();
         Rectangle totalBounds = new Rectangle();
@@ -108,7 +108,6 @@ public class SnippingTranslateTool {
                         TextResult result = cliente.translateText(texto, null, "pt-BR");
                         System.out.println(result.getText());
 
-                        janela.dispose();
                     } catch (IOException | TesseractException | DeepLException | InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
