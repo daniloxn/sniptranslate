@@ -89,26 +89,9 @@ public class SnippingTranslateTool {
                             selection.height);
 
                     try {
-                        ImageIO.write(recorte, "png", new File("recorte.png"));
-
-                        ITesseract tesseract = new Tesseract();
-                        tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
-                        tesseract.setLanguage("eng");
-
-                        String texto = tesseract.doOCR(recorte);
-                        System.out.println("Texto encontrado:");
-                        System.out.printf("TEXTO: %s%n%n", texto);
-
-                        Dotenv dotenv = Dotenv.load();
-                        String authKey = dotenv.get("DEEPL_API_KEY");
-                        if (authKey == null || authKey.isBlank()) {
-                            throw new IllegalStateException("DEEPL_API_KEY não encontrada no arquivo .env");
-                        }
-                        DeepLClient cliente = new DeepLClient(authKey);
-                        TextResult result = cliente.translateText(texto, null, "pt-BR");
-                        System.out.println(result.getText());
-
-                    } catch (IOException | TesseractException | DeepLException | InterruptedException ex) {
+                        ImageIO.write(recorte, "png", new File("C:/Users/danil/IdeaProjects/SnippingTranslate/temp/recorte.png"));
+                        janela.dispose();
+                    } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
@@ -137,5 +120,25 @@ public class SnippingTranslateTool {
         int height = Math.abs(startPoint.y - endPoint.y);
 
         selection = new Rectangle(x, y, width, height);
+    }
+
+    public static String translateText(String text) {
+
+        try {
+            Dotenv dotenv = Dotenv.load();
+            String authKey = dotenv.get("DEEPL_API_KEY");
+            if (authKey == null || authKey.isBlank()) {
+                throw new IllegalStateException("DEEPL_API_KEY não encontrada no arquivo .env");
+            }
+            DeepLClient cliente = new DeepLClient(authKey);
+            TextResult result = cliente.translateText(text, null, "pt-BR");
+            System.out.println(result.getText());
+            String translated = result.getText();
+            return translated;
+        } catch (Exception e) {
+            return "n foi possivel traduzir";
+        }
+
+
     }
 }
