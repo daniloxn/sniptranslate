@@ -1,14 +1,12 @@
 package org.example;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import net.sourceforge.lept4j.ILeptonica.leptSetStderrHandler_handler_callback;
+
 import com.deepl.api.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,13 +14,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+
 
 public class SnippingTranslateTool {
     static Point startPoint;
     static Point endPoint;
     static Rectangle selection;
     private static BufferedImage screenShot;
+
 
     public static void main(String[] args) throws AWTException {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -88,11 +87,19 @@ public class SnippingTranslateTool {
                             selection.width,
                             selection.height);
 
+                    File arquivoRecorte = new File("C:/Users/danil/IdeaProjects/SnippingTranslate/temp/recorte.png");
                     try {
-                        ImageIO.write(recorte, "png", new File("C:/Users/danil/IdeaProjects/SnippingTranslate/temp/recorte.png"));
+                        ImageIO.write(recorte, "png", arquivoRecorte);
                         janela.dispose();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+
+                        OCRClient ocr = new OCRClient();
+                        Dotenv dotenv = Dotenv.load();
+
+                        String apiKey = dotenv.get("OCR_API_KEY");
+                        String jsonResposta = ocr.parseImage(arquivoRecorte.getAbsolutePath(), apiKey, "eng");
+                        translateText(jsonResposta);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erro no processamento" + ex.getMessage());
                     }
                 }
             }

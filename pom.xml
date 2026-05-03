@@ -20,7 +20,7 @@
             <artifactId>tess4j</artifactId>
             <version>5.13.0</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.deepl.api</groupId>
             <artifactId>deepl-java</artifactId>
@@ -33,8 +33,14 @@
             <version>3.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
     </dependencies>
-    
+
 
 
 </project>
